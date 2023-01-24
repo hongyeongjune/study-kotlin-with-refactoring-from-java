@@ -14,11 +14,11 @@ import com.group.libraryapp.dto.user.request.UserUpdateRequest;
 import com.group.libraryapp.dto.user.response.UserResponse;
 
 @Service
-public class UserService {
+public class JavaUserService {
 
   private final UserRepository userRepository;
 
-  public UserService(UserRepository userRepository) {
+  public JavaUserService(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
 

@@ -61,7 +61,7 @@ class UserServiceTest @Autowired constructor(
         ))
 
         // when
-        val result = userService.users
+        val result = userService.getUsers()
 
         // then
         assertThat(result).hasSize(3)
