@@ -11,25 +11,25 @@ import com.group.libraryapp.dto.book.request.BookReturnRequest;
 import com.group.libraryapp.service.book.BookService;
 
 @RestController
-public class BookController {
+public class JavaBookController {
 
   private final BookService bookService;
 
-  public BookController(BookService bookService) {
+  public JavaBookController(BookService bookService) {
     this.bookService = bookService;
   }
 
-  @PostMapping("/book")
+  @PostMapping("/java/book")
   public void saveBook(@RequestBody BookRequest request) {
     bookService.saveBook(request);
   }
 
-  @PostMapping("/book/loan")
+  @PostMapping("/java/book/loan")
   public void loanBook(@RequestBody BookLoanRequest request) {
     bookService.loanBook(request);
   }
 
-  @PutMapping("/book/return")
+  @PutMapping("/java/book/return")
   public void returnBook(@RequestBody BookReturnRequest request) {
     bookService.returnBook(request);
   }
