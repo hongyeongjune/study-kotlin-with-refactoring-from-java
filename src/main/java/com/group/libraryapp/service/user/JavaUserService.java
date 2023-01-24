@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.group.libraryapp.domain.user.JavaUserRepository;
 import com.group.libraryapp.domain.user.User;
 import com.group.libraryapp.domain.user.UserRepository;
 import com.group.libraryapp.dto.user.request.UserCreateRequest;
@@ -16,9 +17,9 @@ import com.group.libraryapp.dto.user.response.UserResponse;
 @Service
 public class JavaUserService {
 
-  private final UserRepository userRepository;
+  private final JavaUserRepository userRepository;
 
-  public JavaUserService(UserRepository userRepository) {
+  public JavaUserService(JavaUserRepository userRepository) {
     this.userRepository = userRepository;
   }
 
