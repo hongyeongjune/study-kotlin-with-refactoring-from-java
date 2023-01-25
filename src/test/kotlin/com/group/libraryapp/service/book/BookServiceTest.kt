@@ -1,6 +1,6 @@
 package com.group.libraryapp.service.book
 
-import com.group.libraryapp.domain.book.Book
+import com.group.libraryapp.domain.DomainCreator
 import com.group.libraryapp.domain.book.BookRepository
 import com.group.libraryapp.domain.user.User
 import com.group.libraryapp.domain.user.UserRepository
@@ -33,7 +33,7 @@ class BookServiceTest @Autowired constructor(
     @Test
     fun saveBook_success() {
         // given
-        val request = BookRequest("화산귀환")
+        val request = BookRequest("화산귀환", "COMPUTER")
 
         // when
         bookService.saveBook(request)
@@ -47,7 +47,7 @@ class BookServiceTest @Autowired constructor(
     @Test
     fun loadBook_success() {
         // given
-        val savedBook = bookRepository.save(Book("화산귀환"))
+        val savedBook = bookRepository.save(DomainCreator.createBook("화산귀환", "COMPUTER"))
         val savedUser = userRepository.save(User("홍영준", 29))
         val request = BookLoanRequest("홍영준", "화산귀환")
 
@@ -65,7 +65,7 @@ class BookServiceTest @Autowired constructor(
     @Test
     fun loadBook_throw_IllegalArgumentException_when_loanHistory_is_exist() {
         // given
-        bookRepository.save(Book("화산귀환"))
+        bookRepository.save(DomainCreator.createBook("화산귀환", "COMPUTER"))
         val savedUser = userRepository.save(User("홍영준", 29))
         userLoanHistoryRepository.save(UserLoanHistory(savedUser, "화산귀환", false))
         val request = BookLoanRequest("홍영준", "화산귀환")
@@ -81,7 +81,7 @@ class BookServiceTest @Autowired constructor(
     @Test
     fun returnBook_success() {
         // given
-        bookRepository.save(Book("화산귀환"))
+        bookRepository.save(DomainCreator.createBook("화산귀환", "COMPUTER"))
         val savedUser = userRepository.save(User("홍영준", 29))
         userLoanHistoryRepository.save(UserLoanHistory(savedUser, "화산귀환", false))
         val request = BookReturnRequest("홍영준", "화산귀환")
