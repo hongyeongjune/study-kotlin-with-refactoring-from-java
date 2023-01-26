@@ -1,7 +1,10 @@
 package com.group.libraryapp.service.user
 
+import com.group.libraryapp.domain.DomainCreator
 import com.group.libraryapp.domain.user.User
 import com.group.libraryapp.domain.user.UserRepository
+import com.group.libraryapp.domain.user.loanhistory.UserLoanHistoryRepository
+import com.group.libraryapp.domain.user.loanhistory.UserLoanStatus
 import com.group.libraryapp.dto.user.request.UserCreateRequest
 import com.group.libraryapp.dto.user.request.UserUpdateRequest
 import org.assertj.core.api.AssertionsForInterfaceTypes.assertThat
@@ -14,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest
 class UserServiceTest @Autowired constructor(
     private val userRepository: UserRepository,
     private val userService: UserService,
+    private val userLoanHistoryRepository: UserLoanHistoryRepository,
 ) {
 
     @BeforeEach
@@ -93,5 +97,40 @@ class UserServiceTest @Autowired constructor(
 
         // then
         assertThat(userRepository.findAll()).isEmpty()
+    }
+
+    @Test
+    fun getUserLoanHistories_success_when_loan_is_null() {
+        // given
+        val expected = userRepository.save(User("홍영준", 29))
+
+        // when
+        val result = userService.getUserLoanHistories()
+
+        // then
+        assertThat(result).hasSize(1)
+        assertThat(result[0].name).isEqualTo(expected.name)
+        assertThat(result[0].books).isEmpty()
+    }
+
+    @Test
+    fun getUserLoanHistories_success_when_user_have_many_loan() {
+        // given
+        val savedUser = userRepository.save(User("홍영준", 29))
+        userLoanHistoryRepository.saveAll(listOf(
+            DomainCreator.createUserLoanHistory(savedUser, "화산귀환", UserLoanStatus.LOANED),
+            DomainCreator.createUserLoanHistory(savedUser, "광마회귀", UserLoanStatus.LOANED),
+            DomainCreator.createUserLoanHistory(savedUser, "나노마신", UserLoanStatus.RETURNED),
+        ))
+
+        // when
+        val result = userService.getUserLoanHistories()
+
+        // then
+        assertThat(result).hasSize(1)
+        assertThat(result[0].name).isEqualTo(savedUser.name)
+        assertThat(result[0].books).hasSize(3)
+        assertThat(result[0].books).extracting("name").containsExactlyInAnyOrder("화산귀환", "광마회귀", "나노마신")
+        assertThat(result[0].books).extracting("isReturn").containsExactlyInAnyOrder(false, false, true)
     }
 }
